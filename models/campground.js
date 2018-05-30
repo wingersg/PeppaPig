@@ -7,6 +7,7 @@ var mongoose = require("mongoose");
      location: String,
    lat: Number,
    lng: Number,
+   createdAt: { type: Date, default: Date.now },
      author: {
       id: {
                 type: mongoose.Schema.Types.ObjectId,

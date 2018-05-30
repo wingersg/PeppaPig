@@ -66,6 +66,9 @@
 * Demo working version
 * Install and configure connect-flash
 * Add bootstrap alerts to header
+* 
+
+# add forgot password feature---v12, 5/30/2018
 
 
     

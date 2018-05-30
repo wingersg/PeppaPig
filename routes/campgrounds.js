@@ -2,6 +2,27 @@ var express      = require("express");
 var router       = express.Router({mergeParams:true});
 var Campground = require("../models/campground");
 var NodeGeocoder = require('node-geocoder');
+var multer = require('multer');
+var storage = multer.diskStorage({
+  filename: function(req, file, callback) {
+    callback(null, Date.now() + file.originalname);
+  }
+});
+var imageFilter = function (req, file, cb) {
+    // accept image files only
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        return cb(new Error('Only image files are allowed!'), false);
+    }
+    cb(null, true);
+};
+var upload = multer({ storage: storage, fileFilter: imageFilter})
+
+var cloudinary = require('cloudinary');
+cloudinary.config({ 
+  cloud_name: 'db6yaawam', 
+  api_key: process.env.CLOUDINARY_API_KEY, 
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
  
 var options = {
   provider: 'google',
@@ -53,8 +74,31 @@ router.get("/",function(req,res) {
 // });
 
 //CREATE - add new campground to DB
-router.post("/", IsLoggedIn, function(req, res){
-  // get data from form and add to campgrounds array
+router.post("/", IsLoggedIn,function(req, res){
+
+//=======================================================Add image upload
+// router.post("/", IsLoggedIn, upload.single('image'),function(req, res){
+//   // get data from form and add to campgrounds array
+//   cloudinary.uploader.upload(req.file.path, function(result) {
+//   // add cloudinary url for the image to the campground object under image property
+//   req.body.campground.image = result.secure_url;
+//   // add author to campground
+//   req.body.campground.author = {
+//     id: req.user._id,
+//     username: req.user.username
+//   }
+//   Campground.create(req.body.campground, function(err, campground) {
+//     if (err) {
+//       req.flash('error', err.message);
+//       return res.redirect('back');
+//     }
+//     res.redirect('/campgrounds/' + campground.id);
+//   });
+// });
+
+//=======================================================Add image upload
+  
+  
   var name = req.body.name;
   var image = req.body.image;
   var desc = req.body.description;
@@ -71,6 +115,26 @@ router.post("/", IsLoggedIn, function(req, res){
     var lng = data[0].longitude;
     var location = data[0].formattedAddress;
     var newCampground = {name: name, image: image, description: desc, author:author, location: location, lat: lat, lng: lng};
+//================================================================================
+// code for cloudinary    
+//     cloudinary.uploader.upload(req.file.path, function(result) {
+//   // add cloudinary url for the image to the campground object under image property
+//   req.body.campground.image = result.secure_url;
+//   // add author to campground
+//   req.body.campground.author = {
+//     id: req.user._id,
+//     username: req.user.username
+//   }
+//   Campground.create(req.body.campground, function(err, campground) {
+//     if (err) {
+//       req.flash('error', err.message);
+//       return res.redirect('back');
+//     }
+//     res.redirect('/campgrounds/' + campground.id);
+//   });
+// });
+//================================================================================
+    
     // Create a new campground and save to DB
     Campground.create(newCampground, function(err, newlyCreated){
         if(err){
