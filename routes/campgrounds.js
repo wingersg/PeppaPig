@@ -101,6 +101,7 @@ router.post("/", IsLoggedIn,function(req, res){
   
   var name = req.body.name;
   var image = req.body.image;
+  var cost = req.body.cost;
   var desc = req.body.description;
   var author = {
       id: req.user._id,
@@ -114,7 +115,7 @@ router.post("/", IsLoggedIn,function(req, res){
     var lat = data[0].latitude;
     var lng = data[0].longitude;
     var location = data[0].formattedAddress;
-    var newCampground = {name: name, image: image, description: desc, author:author, location: location, lat: lat, lng: lng};
+    var newCampground = {name: name, image: image, cost: cost,description: desc, author:author, location: location, lat: lat, lng: lng};
 //================================================================================
 // code for cloudinary    
 //     cloudinary.uploader.upload(req.file.path, function(result) {
