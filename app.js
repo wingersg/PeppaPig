@@ -52,8 +52,8 @@ app.use(function(req,res,next){
     next();
 })
 
-mongoose.connect("mongodb://localhost/yelp_camp");
-//mongoose.connect("mongodb://tony:tonysmu98@ds135760.mlab.com:35760/yelpcamp");
+//mongoose.connect("mongodb://localhost/yelp_camp");
+mongoose.connect("mongodb://tony:tonysmu98@ds135760.mlab.com:35760/yelpcamp");
    
 app.use(bodyParser.urlencoded({extended:true}));
 app.set("view engine","ejs");
